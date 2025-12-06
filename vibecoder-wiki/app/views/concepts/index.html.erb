@@ -1,0 +1,247 @@
+<% content_for :title, "IT 개념 탐험하기 - 바이브코더 위키" %>
+<% content_for :description, "30-40대 비전공자를 위한 쉬운 IT 개념 설명. API, Git, 프론트엔드부터 창업 용어까지 일상 언어로 배워보세요." %>
+
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+  <!-- 헤더 섹션 -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          🌟 IT 개념을 쉽게 배워보세요
+        </h1>
+        <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          비전공자도 이해하기 쉬운 일상 비유와 친근한 설명으로<br>
+          IT 세계의 첫걸음을 시작해보세요!
+        </p>
+        
+        <!-- 검색 바 -->
+        <div class="max-w-2xl mx-auto relative" data-controller="search" data-search-url-value="<%= search_concepts_path %>">
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <input 
+              type="search"
+              data-search-target="input"
+              data-action="input->search#search keydown->search#handleKeydown"
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg placeholder-gray-500"
+              placeholder="'API', 'Git', '프론트엔드' 같은 IT 용어를 검색해보세요..."
+              autocomplete="off">
+            
+            <div data-search-target="loading" class="hidden absolute right-3 top-3">
+              <svg class="animate-spin h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <!-- 검색 결과 -->
+          <div data-search-target="results" class="hidden absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+          </div>
+          
+          <!-- 검색 제안 -->
+          <div data-search-target="suggestions" class="hidden absolute top-full left-0 right-0 mt-1 z-40">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 필터 및 정렬 섹션 -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+      <%= form_with url: concepts_path, method: :get, local: true, class: "flex flex-wrap items-center gap-4" do |f| %>
+        <!-- 카테고리 필터 -->
+        <div data-controller="dropdown" data-dropdown-close-on-click-outside-value="true" data-auto-submit="true" data-param-name="category">
+          <button type="button" 
+                  data-dropdown-target="button" 
+                  data-action="click->dropdown#toggle"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <span data-dropdown-text>
+              <%= params[:category].present? ? 
+                    case params[:category]
+                    when 'it' then '💻 IT 기초'
+                    when 'startup' then '🚀 창업'
+                    when 'ui' then '🎨 UI/UX'
+                    when 'business' then '💼 비즈니스'
+                    else '📚 모든 카테고리'
+                    end : '📚 모든 카테고리' %>
+            </span>
+            <svg data-dropdown-arrow class="ml-2 h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          
+          <div data-dropdown-target="menu" class="hidden absolute mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+            <div class="py-1">
+              <button type="button" data-dropdown-target="option" data-value="" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                📚 모든 카테고리
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="it" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                💻 IT 기초
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="startup" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                🚀 창업
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="ui" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                🎨 UI/UX
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="business" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                💼 비즈니스
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 레벨 필터 -->
+        <div data-controller="dropdown" data-dropdown-close-on-click-outside-value="true" data-auto-submit="true" data-param-name="level">
+          <button type="button" 
+                  data-dropdown-target="button" 
+                  data-action="click->dropdown#toggle"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+            <span data-dropdown-text>
+              <%= case params[:level]
+                  when '1' then '⭐ 초급만'
+                  when '2' then '⭐⭐ 중급만' 
+                  when '3' then '⭐⭐⭐ 고급만'
+                  else '🌟 모든 레벨'
+                  end %>
+            </span>
+            <svg data-dropdown-arrow class="ml-2 h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          
+          <div data-dropdown-target="menu" class="hidden absolute mt-1 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+            <div class="py-1">
+              <button type="button" data-dropdown-target="option" data-value="" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                🌟 모든 레벨
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="1" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                ⭐ 초급만
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="2" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                ⭐⭐ 중급만
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="3" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                ⭐⭐⭐ 고급만
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 정렬 옵션 -->
+        <div data-controller="dropdown" data-dropdown-close-on-click-outside-value="true" data-auto-submit="true" data-param-name="sort">
+          <button type="button" 
+                  data-dropdown-target="button" 
+                  data-action="click->dropdown#toggle"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+            <span data-dropdown-text>
+              <%= case params[:sort]
+                  when 'popular' then '🔥 인기순'
+                  when 'beginner' then '🌱 초보자용'
+                  when 'verified' then '✅ 검증됨'
+                  else '🆕 최신순'
+                  end %>
+            </span>
+            <svg data-dropdown-arrow class="ml-2 h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          
+          <div data-dropdown-target="menu" class="hidden absolute mt-1 w-36 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+            <div class="py-1">
+              <button type="button" data-dropdown-target="option" data-value="" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                🆕 최신순
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="popular" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                🔥 인기순
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="beginner" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                🌱 초보자용
+              </button>
+              <button type="button" data-dropdown-target="option" data-value="verified" data-action="click->dropdown#select"
+                      class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                ✅ 검증됨
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 필터 초기화 -->
+        <% if params[:category].present? || params[:level].present? || params[:sort].present? %>
+          <%= link_to concepts_path, class: "inline-flex items-center px-3 py-2 text-sm text-gray-500 hover:text-gray-700" do %>
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            필터 초기화
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- 개념 목록 -->
+    <div id="concepts-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <%= render partial: 'concepts/cards', locals: { concepts: @concepts } %>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <% if @pagy.pages > 1 %>
+      <div class="flex justify-center mt-8">
+        <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+      </div>
+    <% end %>
+
+    <!-- 무한 스크롤 트리거 (Turbo Frame) -->
+    <% if @pagy.next %>
+      <%= turbo_frame_tag :concepts_pagination, 
+          src: concepts_path(params.permit(:category, :level, :sort).merge(page: @pagy.next)),
+          loading: :lazy do %>
+        <div class="text-center py-4">
+          <svg class="animate-spin h-6 w-6 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- 빈 상태 -->
+  <% if @concepts.empty? %>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="text-center">
+        <div class="text-6xl mb-4">📚</div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">아직 개념이 없어요</h3>
+        <p class="text-gray-600 mb-8">첫 번째 IT 개념을 추가해주시면 큰 도움이 될 거예요!</p>
+        
+        <% if current_user&.admin? %>
+          <%= link_to new_concept_path, 
+              class: "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" do %>
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            첫 개념 추가하기
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-500">관리자가 곧 개념들을 추가할 예정이에요!</p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

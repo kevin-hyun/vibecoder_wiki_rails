@@ -1,0 +1,58 @@
+source "https://rubygems.org"
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby "3.2.0"
+
+# Rails
+gem "rails", "~> 7.2.0"
+
+# Database - PostgreSQL for Supabase
+gem "pg", "~> 1.1"
+
+# Authentication
+gem "devise"
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
+
+# UI & Frontend
+gem "view_component"
+gem "tailwindcss-rails"
+gem "turbo-rails"
+gem "stimulus-rails"
+gem "jbuilder"
+
+# Pagination & URLs
+gem "pagy"
+gem "friendly_id"
+
+# Background Jobs (Redis 기반)
+gem "redis", "~> 4.0"
+gem "sidekiq"
+
+# 실시간 기능 (Supabase 활용)
+gem "supabase-ruby"  # Supabase 공식 Ruby 클라이언트
+gem "faye-websocket" # 실시간 기능용
+
+# Image processing
+gem "image_processing", "~> 1.2"
+
+# Performance
+gem "bootsnap", require: false
+gem "sprockets-rails"
+
+# Production
+gem "puma", "~> 5.0"
+
+group :development, :test do
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+end
+
+group :development do
+  gem "web-console"
+  gem "listen", "~> 3.3"
+  gem "spring"
+  gem "annotate"
+end

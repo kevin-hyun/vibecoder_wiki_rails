@@ -1,0 +1,63 @@
+/*
+ *= require_tree .
+ *= require_self
+ */
+
+@tailwind base;
+@tailwind components; 
+@tailwind utilities;
+
+/* 비전공자 친화적 스타일 */
+.beginner-friendly {
+  @apply font-medium text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-1;
+}
+
+.difficulty-beginner {
+  @apply bg-green-100 text-green-800;
+}
+
+.difficulty-intermediate {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.difficulty-advanced {
+  @apply bg-red-100 text-red-800;
+}
+
+/* 실시간 알림 애니메이션 */
+.animate-slide-in-bottom {
+  animation: slideInBottom 0.3s ease-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.3s ease-in;
+}
+
+@keyframes slideInBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* 투표 버튼 호버 효과 */
+.vote-button {
+  @apply transition-all duration-200 hover:scale-105;
+}
+
+.vote-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

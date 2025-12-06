@@ -1,0 +1,16 @@
+<%= button_to bookmark_concept_path(concept), 
+    method: :post, 
+    remote: true,
+    class: "inline-flex items-center text-gray-400 hover:text-yellow-500 transition-colors",
+    title: bookmarked ? "북마크 해제" : "북마크 추가",
+    form_class: "inline" do %>
+  <% if bookmarked %>
+    <svg class="w-5 h-5 text-yellow-500 fill-current" viewBox="0 0 24 24">
+      <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+    </svg>
+  <% else %>
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+    </svg>
+  <% end %>
+<% end %>

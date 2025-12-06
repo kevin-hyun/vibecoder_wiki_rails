@@ -1,0 +1,82 @@
+# Rails 기본 무시 파일들
+*.rbc
+capybara-*.html
+.rspec
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/db/*.sqlite3-[0-9]*
+/public/system
+/coverage/
+/spec/tmp
+*.orig
+rerun.txt
+pickle-email-*.html
+
+# Rails 로그 파일들
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Rails 캐시 디렉토리
+/tmp/cache
+/tmp/pids
+/tmp/sessions
+/tmp/sockets
+
+# Uploaded files
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+
+# 환경변수 파일들
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Bundler
+/vendor/bundle
+
+# Node.js (Stimulus/Turbo용)
+/node_modules
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+# Editor 파일들
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 배포 관련
+/public/assets
+/public/packs
+/public/packs-test
+
+# 테스트 커버리지
+/coverage
+
+# 백업 파일들
+*.backup
+*.bak
+*.orig
+
+# 임시 파일들
+*.tmp
+*.temp

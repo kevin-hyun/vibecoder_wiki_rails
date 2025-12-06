@@ -1,0 +1,37 @@
+# Supabase PostgreSQL 설정
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  host: <%= ENV['SUPABASE_DB_HOST'] %>
+  database: <%= ENV['SUPABASE_DB_NAME'] %>
+  username: <%= ENV['SUPABASE_DB_USERNAME'] %>
+  password: <%= ENV['SUPABASE_DB_PASSWORD'] %>
+  port: <%= ENV.fetch('SUPABASE_DB_PORT', 6543) %>
+  sslmode: require
+  pool_mode: transaction
+  # RLS 우회를 위한 서비스 역할 설정
+  variables:
+    search_path: "public"
+    role: "service_role"
+
+test:
+  <<: *default
+  database: vibecoder_wiki_test
+  host: localhost
+  username: postgres
+  password: postgres
+
+production:
+  <<: *default
+  host: <%= ENV['SUPABASE_DB_HOST'] %>
+  database: <%= ENV['SUPABASE_DB_NAME'] %>
+  username: <%= ENV['SUPABASE_DB_USERNAME'] %>
+  password: <%= ENV['SUPABASE_DB_PASSWORD'] %>
+  port: <%= ENV.fetch('SUPABASE_DB_PORT', 6543) %>
+  sslmode: require
+  pool_mode: transaction

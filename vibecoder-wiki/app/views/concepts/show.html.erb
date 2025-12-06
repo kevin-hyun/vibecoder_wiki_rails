@@ -1,0 +1,326 @@
+<% content_for :title, "#{@concept.title} - 바이브코더 위키" %>
+<% content_for :description, @concept.simple_definition %>
+
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+  <!-- 개념 헤더 -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- 브레드크럼 -->
+      <nav class="flex items-center text-sm mb-4">
+        <%= link_to concepts_path, class: "text-indigo-600 hover:text-indigo-800" do %>
+          IT 개념들
+        <% end %>
+        <svg class="flex-shrink-0 mx-2 h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-gray-500"><%= @concept.title %></span>
+      </nav>
+
+      <!-- 개념 정보 -->
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6">
+        <div class="flex-1">
+          <div class="flex items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-900 mr-4"><%= @concept.title %></h1>
+            
+            <!-- 검증 배지 -->
+            <% if @concept.is_verified? %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                ✅ 관리자 검증
+              </span>
+            <% end %>
+            
+            <!-- 인기 배지 -->
+            <% if @concept.is_popular? %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 ml-2">
+                🔥 인기
+              </span>
+            <% end %>
+          </div>
+          
+          <!-- 카테고리 및 레벨 -->
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full 
+                      <%= case @concept.category
+                          when 'it' then 'bg-blue-100 text-blue-800'
+                          when 'startup' then 'bg-purple-100 text-purple-800' 
+                          when 'ui' then 'bg-pink-100 text-pink-800'
+                          when 'business' then 'bg-orange-100 text-orange-800'
+                          else 'bg-gray-100 text-gray-800'
+                          end %>">
+              <%= case @concept.category
+                  when 'it' then '💻 IT 기초'
+                  when 'startup' then '🚀 창업'
+                  when 'ui' then '🎨 UI/UX'
+                  when 'business' then '💼 비즈니스'
+                  else '📚 일반'
+                  end %>
+            </span>
+            
+            <span class="inline-flex items-center px-3 py-1 text-sm font-medium border rounded-full
+                      <%= case @concept.level
+                          when 1 then 'bg-green-50 text-green-800 border-green-200'
+                          when 2 then 'bg-yellow-50 text-yellow-800 border-yellow-200'
+                          when 3 then 'bg-red-50 text-red-800 border-red-200'
+                          else 'bg-gray-50 text-gray-800 border-gray-200'
+                          end %>">
+              <%= '⭐' * @concept.level %> 
+              <%= case @concept.level
+                  when 1 then '초급 (쉬워요)'
+                  when 2 then '중급 (보통이에요)'
+                  when 3 then '고급 (어려워요)'
+                  else '난이도 미정'
+                  end %>
+            </span>
+          </div>
+          
+          <!-- 간단한 정의 -->
+          <p class="text-lg text-gray-700 leading-relaxed mb-4">
+            <%= @concept.simple_definition %>
+          </p>
+          
+          <!-- 상세 설명 -->
+          <% if @concept.description.present? %>
+            <div class="prose prose-gray max-w-none mb-4">
+              <%= simple_format(@concept.description, class: "text-gray-600") %>
+            </div>
+          <% end %>
+          
+          <!-- 왜 중요한가 -->
+          <% if @concept.why_important.present? %>
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg mb-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <span class="text-yellow-600 text-xl">💡</span>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-yellow-800">왜 알아야 할까요?</h3>
+                  <p class="text-sm text-yellow-700 mt-1"><%= @concept.why_important %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        
+        <!-- 북마크 및 통계 -->
+        <div class="flex flex-col items-end space-y-3 ml-4">
+          <% if user_signed_in? %>
+            <div id="bookmark-button-<%= @concept.id %>">
+              <%= render "concepts/bookmark_button", concept: @concept, bookmarked: current_user.bookmarks.exists?(concept: @concept) %>
+            </div>
+          <% end %>
+          
+          <div class="text-right text-sm text-gray-500 space-y-1">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <%= number_with_delimiter(@concept.view_count) %> 번 읽음
+            </div>
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+              <%= @concept.explanations.count %>개 설명
+            </div>
+            <div class="text-gray-400">
+              <%= time_ago_in_words(@concept.created_at) %> 전 추가
+            </div>
+          </div>
+          
+          <!-- 관리자 액션 -->
+          <% if current_user&.admin? %>
+            <div class="flex space-x-2">
+              <% unless @concept.is_verified? %>
+                <%= button_to verify_concept_path(@concept), 
+                    method: :patch,
+                    class: "text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700",
+                    title: "개념 검증" do %>
+                  ✅ 검증
+                <% end %>
+              <% end %>
+              
+              <%= link_to edit_concept_path(@concept), 
+                  class: "text-xs bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700",
+                  title: "개념 수정" do %>
+                ✏️ 수정
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 베스트 설명 캐러셀 -->
+  <% if @best_explanations.present? %>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900 flex items-center">
+            ⭐ 베스트 설명
+            <span class="ml-2 text-sm font-normal text-gray-500">
+              (커뮤니티 투표로 선정된 가장 이해하기 쉬운 설명들)
+            </span>
+          </h2>
+        </div>
+        
+        <div data-controller="carousel" 
+             data-carousel-auto-play-value="true"
+             data-carousel-auto-play-delay-value="7000"
+             class="relative">
+          
+          <div class="overflow-hidden">
+            <div data-carousel-target="container" class="flex transition-transform duration-300 ease-in-out">
+              <% @best_explanations.each_with_index do |explanation, index| %>
+                <div data-carousel-target="slide" class="w-full flex-shrink-0">
+                  <div class="p-6">
+                    <%= render Ui::ExplanationComponent.new(
+                      explanation: explanation,
+                      concept: @concept,
+                      current_user: current_user,
+                      show_actions: true,
+                      compact_mode: false
+                    ) %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          
+          <!-- 캐러셀 컨트롤 -->
+          <% if @best_explanations.count > 1 %>
+            <!-- 이전/다음 버튼 -->
+            <button data-carousel-target="prevBtn" data-action="click->carousel#prev"
+                    class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-shadow">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            
+            <button data-carousel-target="nextBtn" data-action="click->carousel#next"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-shadow">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+            
+            <!-- 인디케이터 -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+              <% @best_explanations.each_with_index do |_, index| %>
+                <button data-carousel-target="indicator"
+                        data-action="click->carousel#goToSlide"
+                        data-slide-index="<%= index %>"
+                        class="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors">
+                </button>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- 설명 작성 섹션 -->
+  <% if user_signed_in? %>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div id="explanation-form" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">
+          💬 나만의 쉬운 설명 추가하기
+        </h3>
+        <%= render "explanations/form", explanation: @new_explanation, concept: @concept %>
+      </div>
+    </div>
+  <% else %>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6 text-center">
+        <h3 class="text-lg font-medium text-indigo-900 mb-2">
+          💡 더 쉬운 설명이 있으신가요?
+        </h3>
+        <p class="text-indigo-700 mb-4">
+          로그인하시면 일상적인 비유나 예시로 이 개념을 더 쉽게 설명해주실 수 있어요!
+        </p>
+        <%= link_to new_user_session_path, 
+            class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" do %>
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+          </svg>
+          로그인해서 설명 작성하기
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- 모든 설명 목록 -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-900">
+          📝 모든 설명 (<%= @all_explanations.count %>개)
+        </h2>
+      </div>
+      
+      <div id="explanations-list" class="divide-y divide-gray-200">
+        <% if @all_explanations.present? %>
+          <% @all_explanations.each do |explanation| %>
+            <div class="p-6">
+              <%= render Ui::ExplanationComponent.new(
+                explanation: explanation,
+                concept: @concept,
+                current_user: current_user,
+                show_actions: true,
+                compact_mode: false
+              ) %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="p-12 text-center text-gray-500">
+            <div class="text-4xl mb-4">💭</div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">아직 설명이 없어요</h3>
+            <p class="text-gray-600 mb-6">첫 번째로 이 개념을 쉽게 설명해주시면 어떨까요?</p>
+            
+            <% if user_signed_in? %>
+              <button onclick="document.getElementById('explanation-form').scrollIntoView({behavior: 'smooth'})"
+                      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                📝 첫 설명 작성하기
+              </button>
+            <% else %>
+              <%= link_to new_user_session_path,
+                  class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" do %>
+                🔐 로그인해서 설명 작성하기
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- 관련 개념 -->
+  <% if @related_concepts.present? %>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-6">
+          🔗 관련 개념들
+          <span class="text-sm font-normal text-gray-500 ml-2">
+            (같은 카테고리의 비슷한 레벨 개념들)
+          </span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <% @related_concepts.each do |related_concept| %>
+            <%= render Ui::ConceptCardComponent.new(
+              concept: related_concept,
+              current_user: current_user,
+              show_bookmark: user_signed_in?
+            ) %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- 투표 피드백 메시지 영역 -->
+  <div id="vote-message" class="fixed bottom-4 right-4 z-50 hidden">
+  </div>
+</div>

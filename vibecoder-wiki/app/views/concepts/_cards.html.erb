@@ -1,0 +1,7 @@
+<% concepts.each do |concept| %>
+  <%= render Ui::ConceptCardComponent.new(
+    concept: concept, 
+    current_user: current_user,
+    show_bookmark: user_signed_in?
+  ) %>
+<% end %>
