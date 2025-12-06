@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "explanations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "conceptId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "upvotes",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

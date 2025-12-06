@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "vibecoder-wiki-dev",
+    "production": "vibecoder-wiki"
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "asia-northeast3",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
